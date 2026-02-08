@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MVP</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;font-family:Vazirmatn}
+body{
+margin:0;
+min-height:100vh;
+background:radial-gradient(circle at top,#111,#000);
+display:flex;
+justify-content:center;
+align-items:center;
+color:#fff
+}
+.app{width:100%;max-width:420px;padding:20px}
+
+/* اعلان */
+.notice{
+position:fixed;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+background:linear-gradient(135deg,#ff9800,#ff5722);
+padding:14px 44px 14px 20px;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,.5);
+z-index:9999;
+max-width:90%;
+text-align:center;
+animation:drop .6s ease
+}
+.notice button{
+position:absolute;
+right:10px;
+top:8px;
+border:none;
+background:none;
+color:#fff;
+font-size:20px;
+cursor:pointer
+}
+@keyframes drop{
+from{opacity:0;transform:translateX(-50%) translateY(-20px)}
+to{opacity:1;transform:translateX(-50%) translateY(0)}
+}
+
+/* کارت */
+.card{
+margin-top:80px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(14px);
+border-radius:24px;
+padding:24px;
+box-shadow:0 30px 70px rgba(0,0,0,.6)
+}
+.card h1{margin-top:0}
+.links button{
+width:100%;
+margin-top:12px;
+padding:14px;
+border-radius:14px;
+border:none;
+cursor:pointer;
+color:#fff;
+font-size:15px;
+background:linear-gradient(135deg,#6a11cb,#2575fc)
+}
+</style>
+</head>
+
+<body>
+
+<!-- اعلان -->
+<div id="notice" class="notice" style="display:none">
+  <button onclick="closeNotice()">×</button>
+  <strong id="notice-title"></strong>
+  <span id="notice-message"></span>
+</div>
+
+<div class="app">
+  <div class="card">
+    <h1>پل ارتباط</h1>
+    <p>نسخه اولیه سامانه ارتباطی</p>
+
+    <div class="links">
+      <button onclick="openRubika()">ارتباط در روبیکا</button>
+      <button onclick="openEitaa()">ارتباط در ایتا</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* اعلان */
+const NOTICE_KEY='notice_closed';
+function closeNotice(){
+ localStorage.setItem(NOTICE_KEY,'1');
+ document.getElementById('notice').style.display='none';
+}
+fetch('notice.json')
+.then(r=>r.json())
+.then(d=>{
+ if(!d.active)return;
+ if(localStorage.getItem(NOTICE_KEY))return;
+ document.getElementById('notice-title').innerText=d.title+' - ';
+ document.getElementById('notice-message').innerText=d.message;
+ document.getElementById('notice').style.display='block';
+});
+
+/* Deep Link */
+function openWithFallback(appUrl, webUrl){
+ const start = Date.now();
+ window.location.href = appUrl;
+ setTimeout(()=>{
+  if(Date.now()-start<1600){
+   window.location.href = webUrl;
+  }
+ },1400);
+}
+
+function openRubika(){
+ openWithFallback(
+  'rubika://l/ehsan_sheikh',
+  'https://rubika.ir/ehsan_sheikh'
+ );
+}
+
+function openEitaa(){
+ openWithFallback(
+  'eitaa://ehsan_sheikh',
+  'https://eitaa.com/ehsan_sheikh'
+ );
+}
+</script>
+
+</body>
+</html>
