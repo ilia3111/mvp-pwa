@@ -1,4 +1,6 @@
 require("dotenv").config();
+process.env.JWT_SECRET = process.env.JWT_SECRET || "temp-secret-change-later-123456789";
+
 const express = require("express");
 const cors = require("cors");
 
